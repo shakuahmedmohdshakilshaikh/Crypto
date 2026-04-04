@@ -26,7 +26,18 @@ namespace DDDCryptoWebApi.Domain.Model
 
         public bool IsActive { get; set; }
 
+        public int CreatedBy { get; set; }
 
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public int? ModifiedBy { get; set; }
+
+
+        public DateTime? ModifiedAt { get; set; }
+
+        public int DeletedBy { get; set; }
+
+        public DateTime DeletedAt { get; set; } = DateTime.Now;
 
         public ICollection<WalletMaster>? Wallets { get; set; }
 
