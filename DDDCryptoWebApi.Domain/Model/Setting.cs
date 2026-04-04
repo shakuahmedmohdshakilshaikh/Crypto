@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DDDCryptoWebApi.Domain.Model
 {
-    public class Setting : BaseEntity
+    public class Setting 
     {
         [Key]
         public int SettingId { get; set; }
@@ -23,5 +23,19 @@ namespace DDDCryptoWebApi.Domain.Model
         public string Theme { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+
+        //[ForeignKey("Createdby")]
+        public int CreatedBy { get; set; }
+        //public UserMaster Createdby { get; set; }
+
+
+        public DateTime CreatedAt { get; set; }
+
+        //[ForeignKey("ModifiedBy")]
+        public int ModifiedBy { get; set; }
+        //public UserMaster ModifyiedBy { get; set; }
+
+        public DateTime ModifiedAt { get; set; }
     }
 }

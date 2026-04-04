@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DDDCryptoWebApi.Domain.Model
 {
-    public class CryptoMaster : BaseEntity
+    public class CryptoMaster 
     {
         [Key]
         public int CryptoId { get; set; }
@@ -24,20 +24,22 @@ namespace DDDCryptoWebApi.Domain.Model
         //public string LastSyncedAt { get; set; }
 
         //[ForeignKey("Createdby")]
-        //public int CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
         //public UserMaster Createdby { get; set; }
 
-      
-        //public DateTime CreatedAt { get; set; }
 
-        //[ForeignKey("ModifiedAt")]
-        //public int ModifiedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        //public UserMaster ModifiedAt { get; set; }
+        //[ForeignKey("ModifiedBy")]
+        public int ModifiedBy { get; set; }
+        //public UserMaster ModifyiedBy { get; set; }
 
-        [ForeignKey("Currency")]
+        public DateTime ModifiedAt { get; set; }
+
+
+        //[ForeignKey("Currency")]
         public int CurrencyId { get; set; }
-        public Currency Currency { get; set; }
+        //public Currency Currency { get; set; }
 
 
 

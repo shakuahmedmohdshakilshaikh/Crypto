@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DDDCryptoWebApi.Domain.Model
 {
-    public class UserPortFolio : BaseEntity
-    {
+    public class UserPortFolio  
+        {
 
         [Key]
         public int PortFolioId { get; set; }
@@ -31,6 +31,20 @@ namespace DDDCryptoWebApi.Domain.Model
         [ForeignKey("UserMaster")]
         public int UserId { get; set; }
         public UserMaster UserMaster { get; set; }
+
+
+        //[ForeignKey("Createdby")]
+        public int CreatedBy { get; set; }
+        //public UserMaster Createdby { get; set; }
+
+
+        public DateTime CreatedAt { get; set; }
+
+        //[ForeignKey("ModifiedBy")]
+        public int ModifiedBy { get; set; }
+        //public UserMaster ModifyiedBy { get; set; }
+
+        public DateTime ModifiedAt { get; set; }
 
 
     }

@@ -30,10 +30,10 @@ namespace DDDCryptoWebApi.Domain.Model
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public int? ModifiedBy { get; set; }
+        public int ModifiedBy { get; set; }
 
 
-        public DateTime? ModifiedAt { get; set; }
+        public DateTime ModifiedAt { get; set; }
 
         public int DeletedBy { get; set; }
 

@@ -34,5 +34,20 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required, StringLength(50)]
         public string PaymentMethod { get; set; }
 
+
+
+        //[ForeignKey("Createdby")]
+        public int CreatedBy { get; set; }
+        //public UserMaster Createdby { get; set; }
+
+
+        public DateTime CreatedAt { get; set; }
+
+        //[ForeignKey("ModifiedBy")]
+        public int ModifiedBy { get; set; }
+        //public UserMaster ModifyiedBy { get; set; }
+
+        public DateTime ModifiedAt { get; set; }
+
     }
 }

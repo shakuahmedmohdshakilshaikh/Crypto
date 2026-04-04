@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DDDCryptoWebApi.Domain.Model
 {
-    public class TransactionHistory : BaseEntity
+    public class TransactionHistory 
     {
         [Key]
         public int TransactionId { get; set; }
@@ -42,6 +42,21 @@ namespace DDDCryptoWebApi.Domain.Model
 
         [Column(TypeName = "decimal(20,2)")]
         public decimal TotalAmount { get; set; }
+
+
+
+        //[ForeignKey("Createdby")]
+        public int CreatedBy { get; set; }
+        //public UserMaster Createdby { get; set; }
+
+
+        public DateTime CreatedAt { get; set; }
+
+        //[ForeignKey("ModifiedBy")]
+        public int ModifiedBy { get; set; }
+        //public UserMaster ModifyiedBy { get; set; }
+
+        public DateTime ModifiedAt { get; set; }
     }
 
 }

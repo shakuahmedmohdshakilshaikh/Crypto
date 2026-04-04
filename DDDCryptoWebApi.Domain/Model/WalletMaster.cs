@@ -31,5 +31,19 @@ namespace DDDCryptoWebApi.Domain.Model
         [ForeignKey("UserMaster")]
         public int UserId { get; set; }
         public UserMaster UserMaster{ get; set; }
+
+
+        //[ForeignKey("Createdby")]
+        //public int CreatedBy { get; set; }
+        //public UserMaster Createdby { get; set; }
+
+
+        //public DateTime CreatedAt { get; set; }
+
+        //[ForeignKey("ModifiedBy")]
+        //public int ModifiedBy { get; set; }
+        //public UserMaster ModifyiedBy { get; set; }
+
+        //public DateTime ModifiedAt { get; set; }
     }
 }
