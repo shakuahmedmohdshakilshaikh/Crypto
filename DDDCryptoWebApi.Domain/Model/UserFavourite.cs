@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DDDCryptoWebApi.Domain.Model
 {
-    public class UserFavourite 
+    public class UserFavourite
     {
         [Key]
         public int Fid { get; set; }
@@ -25,18 +25,16 @@ namespace DDDCryptoWebApi.Domain.Model
         [ForeignKey("CryptoId")]
         public CryptoMaster Crypto { get; set; }
 
+        public string? CreatedBy { get; set; }
 
-        //[ForeignKey("Createdby")]
-        public int CreatedBy { get; set; }
-        //public UserMaster Createdby { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public string? ModifiedBy { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
 
-        //[ForeignKey("ModifiedBy")]
-        public int ModifiedBy { get; set; }
-        //public UserMaster ModifyiedBy { get; set; }
+        public string? DeletedBy { get; set; }
 
-        public DateTime ModifiedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }

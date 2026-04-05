@@ -10,40 +10,31 @@ namespace DDDCryptoWebApi.Domain.Model
 {
     public class WalletMaster
     {
-
         [Key]
         public int WalletId { get; set; }
 
-
-        public decimal Balance { get; set; }
-
-        public string CreatedBy { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public string ModifiedBy { get; set; }
-
-        public DateTime ModifiedAt { get; set; }
-
-        public string DelatedBy { get; set; }
-        public DateTime DelatedAt { get; set; }
-
-        [ForeignKey("UserMaster")]
+        [Required]
         public int UserId { get; set; }
-        public UserMaster UserMaster{ get; set; }
 
+        [ForeignKey("UserId")]
+        public UserMaster User { get; set; }
 
-        //[ForeignKey("Createdby")]
-        //public int CreatedBy { get; set; }
-        //public UserMaster Createdby { get; set; }
+        [Column(TypeName = "decimal(20,2)")]
+        public decimal Balance { get; set; } = 0;
 
+        public ICollection<WalletTransaction>? WalletTransactions { get; set; }
 
-        //public DateTime CreatedAt { get; set; }
+        public string? CreatedBy { get; set; }
 
-        //[ForeignKey("ModifiedBy")]
-        //public int ModifiedBy { get; set; }
-        //public UserMaster ModifyiedBy { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        //public DateTime ModifiedAt { get; set; }
+        public string? ModifiedBy { get; set; }
+
+        public DateTime? ModifiedAt { get; set; }
+
+        public string? DeletedBy { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

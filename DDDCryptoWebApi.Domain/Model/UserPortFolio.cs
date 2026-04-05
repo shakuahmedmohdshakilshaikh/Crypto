@@ -14,37 +14,42 @@ namespace DDDCryptoWebApi.Domain.Model
         [Key]
         public int PortFolioId { get; set; }
 
-      
+        [Required]
+        public int UserId { get; set; }
+
+        [Required]
+        public int CryptoId { get; set; }
+
+        [ForeignKey("UserId")]
+        public UserMaster User { get; set; }
+
+        [ForeignKey("CryptoId")]
+        public CryptoMaster Crypto { get; set; }
+
+        [Column(TypeName = "decimal(20,2)")]
+        public decimal Quantity { get; set; }
+
         [Column(TypeName = "decimal(20,2)")]
         public decimal AvgBuyPrice { get; set; }
 
         [Column(TypeName = "decimal(20,2)")]
         public decimal TotalInvestment { get; set; }
 
-        [Column(TypeName = "decimal(20,2)")]
-        public decimal Quantity { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
-        [ForeignKey("CryptoMaster")]
-        public int CryptoId { get; set; }
-        public CryptoMaster CryptoMaster { get; set; }
+        public string? CreatedBy { get; set; }
 
-        [ForeignKey("UserMaster")]
-        public int UserId { get; set; }
-        public UserMaster UserMaster { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public string? ModifiedBy { get; set; }
 
-        //[ForeignKey("Createdby")]
-        public int CreatedBy { get; set; }
-        //public UserMaster Createdby { get; set; }
+        public DateTime? ModifiedAt { get; set; }
+
+        public string? DeletedBy { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
 
 
-        public DateTime CreatedAt { get; set; }
-
-        //[ForeignKey("ModifiedBy")]
-        public int ModifiedBy { get; set; }
-        //public UserMaster ModifyiedBy { get; set; }
-
-        public DateTime ModifiedAt { get; set; }
 
 
     }

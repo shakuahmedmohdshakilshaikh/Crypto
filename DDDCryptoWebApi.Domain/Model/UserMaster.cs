@@ -15,29 +15,28 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required, StringLength(30)]
         public string UserFullName { get; set; }
 
-
         [Required, EmailAddress, StringLength(25)]
         public string Email { get; set; }
 
         [Required, StringLength(50)]
-        public string PassWord{ get; set; }
+        public string PassWord { get; set; }
 
-        public string PhoneNumber{ get; set; }
+        [Required, StringLength(12)]
+        public string PhoneNumber { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
-        public int CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public int ModifiedBy { get; set; }
+        public string? ModifiedBy { get; set; }
 
+        public DateTime? ModifiedAt { get; set; }
 
-        public DateTime ModifiedAt { get; set; }
+        public string? DeletedBy { get; set; }
 
-        public int DeletedBy { get; set; }
-
-        public DateTime DeletedAt { get; set; } = DateTime.Now;
+        public DateTime? DeletedAt { get; set; }
 
         public ICollection<WalletMaster>? Wallets { get; set; }
 

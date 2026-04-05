@@ -10,6 +10,7 @@ namespace DDDCryptoWebApi.Domain.Model
 {
     public class Currency 
     {
+
         [Key]
         public int CurrencyId { get; set; }
 
@@ -19,20 +20,19 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required, StringLength(5)]
         public string Symbol { get; set; }
 
-
-        //[ForeignKey("Createdby")]
-        public int CreatedBy { get; set; }
-        //public UserMaster Createdby { get; set; }
-
-
-        public DateTime CreatedAt { get; set; }
-
-        //[ForeignKey("ModifiedBy")]
-        public int ModifiedBy { get; set; }
-        //public UserMaster ModifyiedBy { get; set; }
-
-        public DateTime ModifiedAt { get; set; }
-
         public ICollection<CryptoMaster>? Cryptos { get; set; }
+
+        public string? CreatedBy { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public string? ModifiedBy { get; set; }
+
+        public DateTime? ModifiedAt { get; set; }
+
+        public string? DeletedBy { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
+
     }
 }

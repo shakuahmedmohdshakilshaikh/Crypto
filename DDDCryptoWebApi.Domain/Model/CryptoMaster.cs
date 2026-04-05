@@ -13,33 +13,36 @@ namespace DDDCryptoWebApi.Domain.Model
         [Key]
         public int CryptoId { get; set; }
 
+        [Required, StringLength(30)]
         public string CryptoName { get; set; }
 
+        [Required, StringLength(30)]
         public string Symbol { get; set; }
 
-        public int CoinGeckoId { get; set; }
+        [Required, StringLength(30)]
+        public string CoinGeckoId { get; set; }
 
-        public string IsActive { get; set; }
+        public bool IsActive { get; set; }
 
-        //public string LastSyncedAt { get; set; }
+        public DateTime LastSyncedAt { get; set; }
 
-        //[ForeignKey("Createdby")]
-        public int CreatedBy { get; set; }
-        //public UserMaster Createdby { get; set; }
-
-
-        public DateTime CreatedAt { get; set; }
-
-        //[ForeignKey("ModifiedBy")]
-        public int ModifiedBy { get; set; }
-        //public UserMaster ModifyiedBy { get; set; }
-
-        public DateTime ModifiedAt { get; set; }
-
-
-        //[ForeignKey("Currency")]
+        [Required]
         public int CurrencyId { get; set; }
-        //public Currency Currency { get; set; }
+
+        [ForeignKey("CurrencyId")]
+        public Currency Currency { get; set; }
+
+        public string? CreatedBy { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public string? ModifiedBy { get; set; }
+
+        public DateTime? ModifiedAt { get; set; }
+
+        public string? DeletedBy { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
 
 
 
