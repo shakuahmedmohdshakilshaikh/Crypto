@@ -24,7 +24,7 @@ namespace Crypto.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Global Exception Occurred");
+                //_logger.LogError(ex, "Global Exception Occurred");
 
                 context.Response.ContentType = "application/json";
 
