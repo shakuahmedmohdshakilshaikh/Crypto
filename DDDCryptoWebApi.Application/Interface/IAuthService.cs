@@ -11,5 +11,15 @@ namespace DDDCryptoWebApi.Application.Interface
     {
         Task<string> Register(RegisterDTO dto);
         Task<AuthResponseDTO> Login(LoginDTO dto);
+
+        Task<string> ForgotPassword(string email);
+
+        Task<string> VerifyResetOtp(string email, string otp);
+
+        Task<string> ResetPassword(ResetPasswordDTO dto);
+
+        Task<string> Setup2FA(string email);
+
+        Task<AuthResponseDTO> Verify2FA(string email, string code);
     }
 }

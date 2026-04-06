@@ -33,5 +33,29 @@ namespace Crypto.Controllers
             return Ok(result);
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            return Ok(await _service.ForgotPassword(email));
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(
+            ResetPasswordDTO dto)
+        {
+            return Ok(await _service.ResetPassword(dto));
+        }
+
+        [HttpPost("verify-2fa")]
+        public async Task<IActionResult> Verify2FA(
+            TwoFactorDTO dto)
+        {
+            var result = await _service.Verify2FA(
+                dto.Email,
+                dto.Code);
+
+            return Ok(result);
+        }
+
     }
 }

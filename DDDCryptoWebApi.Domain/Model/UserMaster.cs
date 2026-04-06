@@ -15,15 +15,22 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required, StringLength(30)]
         public string UserFullName { get; set; }
 
-        [Required, EmailAddress, StringLength(25)]
+        [Required, EmailAddress, StringLength(50)]
         public string Email { get; set; }
 
-        [Required, StringLength(50)]
+        [Required, StringLength(200)]
         public string PassWord { get; set; }
 
-        [Required, StringLength(12)]
+        [Required, StringLength(15)]
         public string PhoneNumber { get; set; }
 
+        public string? Role { get; set; }
+
+        public bool IsTwoFactorEnabled { get; set; }
+
+        public string? TwoFactorSecretKey { get; set; }
+
+        public string? ResetOtp { get; set; }
         public bool IsActive { get; set; } = true;
 
         public string? CreatedBy { get; set; }

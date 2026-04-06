@@ -42,6 +42,9 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             {
                 CryptoName = x.Name,
                 Symbol = x.Symbol.ToUpper(),
+                Image = x.Image,
+                CurrentPrice = x.CurrentPrice,
+                MarketCap = x.MarketCap,
                 CoinGeckoId = x.Id,
                 IsActive = true,
                 LastSyncedAt = DateTime.Now

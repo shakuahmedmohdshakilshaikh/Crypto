@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,8 +17,17 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required, StringLength(30)]
         public string CryptoName { get; set; }
 
+        
+        public string Image { get; set; }
+
         [Required, StringLength(30)]
         public string Symbol { get; set; }
+
+        public decimal CurrentPrice { get; set; }
+       
+        public decimal MarketCap { get; set; }
+
+
 
         [Required, StringLength(30)]
         public string CoinGeckoId { get; set; }
