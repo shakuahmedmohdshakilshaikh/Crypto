@@ -1,4 +1,5 @@
-﻿using DDDCryptoWebApi.Application.Interface;
+﻿using DDDCryptoWebApi.Application.DTO;
+using DDDCryptoWebApi.Application.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,15 +16,26 @@ namespace Crypto.Controllers
             _service = service;
         }
 
-        [HttpGet("market")]
-        public async Task<IActionResult> GetMarketData(
-            int page = 1,
-            int pageSize = 10)
+        [HttpPost("sync")]
+        public async Task<IActionResult> Sync()
         {
-            var data = await _service
-                .GetCryptoMarketDataAsync("inr", page, pageSize);
+            await _service.SyncCoinsToDatabaseAsync();
 
-            return Ok(data);
+            return Ok(
+                ApiResponse<string>
+                    .SuccessResponse("Done", "Crypto data synced successfully")
+            );
+        }
+
+        [HttpGet("fetch")]
+        public async Task<IActionResult> Fetch()
+        {
+            var data = await _service.FetchCoinsAsync();
+
+            return Ok(
+                ApiResponse<List<CoinGeckoCoinDTO>>
+                    .SuccessResponse(data, "Data fetched successfully")
+            );
         }
     }
-}
+    }

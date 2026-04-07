@@ -50,7 +50,7 @@ namespace Crypto.Middleware
 
                     default:
                         statusCode = StatusCodes.Status500InternalServerError;
-                        message = "Something went wrong";
+                        message = ex.Message;
                         break;
                 }
 

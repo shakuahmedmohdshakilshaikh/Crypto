@@ -14,13 +14,13 @@ namespace DDDCryptoWebApi.Domain.Model
         [Key]
         public int CryptoId { get; set; }
 
-        [Required, StringLength(30)]
+        [Required, StringLength(100)]
         public string CryptoName { get; set; }
 
         
         public string Image { get; set; }
 
-        [Required, StringLength(30)]
+        [Required, StringLength(100)]
         public string Symbol { get; set; }
 
         public decimal CurrentPrice { get; set; }
@@ -29,7 +29,7 @@ namespace DDDCryptoWebApi.Domain.Model
 
 
 
-        [Required, StringLength(30)]
+        [Required, StringLength(100)]
         public string CoinGeckoId { get; set; }
 
         public bool IsActive { get; set; }

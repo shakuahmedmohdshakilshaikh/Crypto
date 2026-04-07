@@ -3,6 +3,7 @@ using DDDCryptoWebApi.Application.DTO;
 using DDDCryptoWebApi.Application.Interface;
 using DDDCryptoWebApi.Application.Mapping;
 using DDDCryptoWebApi.Infrastructure.Data;
+using DDDCryptoWebApi.Infrastructure.Jobs;
 using DDDCryptoWebApi.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -56,6 +57,11 @@ builder.Services.AddHttpClient<ICoinGeckoService, CoinGeckoService>(
             "x-cg-demo-api-key",
             settings.ApiKey);
     });
+builder.Services.AddHttpClient<ICoinGeckoService, CoinGeckoService>();
+
+builder.Services.AddHostedService<CryptoSyncJob>();
+
+
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 

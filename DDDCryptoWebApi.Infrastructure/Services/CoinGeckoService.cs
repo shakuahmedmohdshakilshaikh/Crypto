@@ -1,54 +1,87 @@
 ﻿using DDDCryptoWebApi.Application.DTO;
 using DDDCryptoWebApi.Application.Interface;
 using DDDCryptoWebApi.Domain.Model;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using DDDCryptoWebApi.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DDDCryptoWebApi.Infrastructure.Services
 {
     public class CoinGeckoService : ICoinGeckoService
     {
         private readonly HttpClient _httpClient;
-        private readonly CoinGeckoSettings _settings;
+        private readonly ApplicationDbContext _context;
 
         public CoinGeckoService(
             HttpClient httpClient,
-            IOptions<CoinGeckoSettings> settings)
+            ApplicationDbContext context)
         {
             _httpClient = httpClient;
-            _settings = settings.Value;
+            _context = context;
         }
 
-        public async Task<List<CryptoMaster>> GetCryptoMarketDataAsync(
+        public async Task<List<CoinGeckoCoinDTO>> FetchCoinsAsync(
             string currency = "inr",
             int page = 1,
-            int pageSize = 10)
+            int pageSize = 50)
         {
             var url =
-                $"coins/markets?vs_currency=inr" +
-                $"&page={page}&per_page={pageSize}";
+                $"https://api.coingecko.com/api/v3/coins/markets" +
+                $"?vs_currency={currency}" +
+                $"&page={page}" +
+                $"&per_page={pageSize}";
 
-            //var url =  $"/coins/markets?vs_currency=inr"
-
-            var response = await _httpClient
+            var result = await _httpClient
                 .GetFromJsonAsync<List<CoinGeckoCoinDTO>>(url);
 
-            return response.Select(x => new CryptoMaster
+            return result ?? new List<CoinGeckoCoinDTO>();
+        }
+
+        public async Task SyncCoinsToDatabaseAsync()
+        {
+            var coins = await FetchCoinsAsync();
+
+            var inrCurrency = await _context.Currencies
+                .FirstOrDefaultAsync(x => x.Symbol == "INR");
+
+            if (inrCurrency == null)
             {
-                CryptoName = x.Name,
-                Symbol = x.Symbol.ToUpper(),
-                Image = x.Image,
-                CurrentPrice = x.CurrentPrice,
-                MarketCap = x.MarketCap,
-                CoinGeckoId = x.Id,
-                IsActive = true,
-                LastSyncedAt = DateTime.Now
-            }).ToList();
+                throw new Exception("INR currency not found in Currencies table");
+            }
+
+            foreach (var coin in coins)
+            {
+                var existing = await _context.Cryptos
+                    .FirstOrDefaultAsync(x => x.CoinGeckoId == coin.Id);
+
+                if (existing == null)
+                {
+                    var newCoin = new CryptoMaster
+                    {
+                        CryptoName = coin.Name,
+                        Symbol = coin.Symbol.ToUpper(),
+                        CoinGeckoId = coin.Id,
+                        CurrentPrice = coin.CurrentPrice,
+                        MarketCap = coin.MarketCap,
+                        Image = coin.Image,
+                        IsActive = true,
+                        LastSyncedAt = DateTime.Now,
+                        CurrencyId = inrCurrency.CurrencyId
+                    };
+
+                    _context.Cryptos.Add(newCoin);
+                }
+                else
+                {
+                    existing.CurrentPrice = coin.CurrentPrice;
+                    existing.MarketCap = coin.MarketCap;
+                    existing.Image = coin.Image;
+                    existing.LastSyncedAt = DateTime.Now;
+                    existing.ModifiedAt = DateTime.Now;
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

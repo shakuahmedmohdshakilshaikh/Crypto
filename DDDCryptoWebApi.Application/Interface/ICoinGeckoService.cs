@@ -1,4 +1,5 @@
-﻿using DDDCryptoWebApi.Domain.Model;
+﻿using DDDCryptoWebApi.Application.DTO;
+using DDDCryptoWebApi.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,11 @@ namespace DDDCryptoWebApi.Application.Interface
 {
     public interface ICoinGeckoService
     {
-        Task<List<CryptoMaster>> GetCryptoMarketDataAsync(
-            string currency = "inr",
+        Task<List<CoinGeckoCoinDTO>> FetchCoinsAsync(
+            string currency = "usd",
             int page = 1,
-            int pageSize = 10
-        );
+            int pageSize = 10);
+
+        Task SyncCoinsToDatabaseAsync();
     }
 }
