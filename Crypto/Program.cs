@@ -64,7 +64,11 @@ builder.Services.AddHostedService<CryptoSyncJob>();
 
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<ITransactionHistoryService, TransactionHistoryService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserFavouriteService, UserFavouriteService>();
 builder.Services.AddAutoMapper(typeof(DTOMapping)); // Automapper
 
 

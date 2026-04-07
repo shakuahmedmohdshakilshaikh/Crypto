@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace DDDCryptoWebApi.Domain.Model
 {
-    public class UserPortFolio  
-        {
-
+    public class PortfolioTransaction
+    {
         [Key]
-        public int PortFolioId { get; set; }
+        public int PortfolioTransactionId { get; set; }
 
         [Required]
         public int UserId { get; set; }
@@ -20,38 +19,24 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required]
         public int CryptoId { get; set; }
 
+        [Required, StringLength(10)]
+        public string TransactionType { get; set; } // Buy / Sell
+
+        [Column(TypeName = "decimal(20,8)")]
+        public decimal Quantity { get; set; }
+
+        [Column(TypeName = "decimal(20,2)")]
+        public decimal PricePerUnit { get; set; }
+
+        [Column(TypeName = "decimal(20,2)")]
+        public decimal TotalAmount { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
         [ForeignKey("UserId")]
         public UserMaster User { get; set; }
 
         [ForeignKey("CryptoId")]
         public CryptoMaster Crypto { get; set; }
-
-        [Column(TypeName = "decimal(20,8)")]
-        public decimal Quantity { get; set; }
-
-
-        [Column(TypeName = "decimal(20,2)")]
-        public decimal AvgBuyPrice { get; set; }
-
-        [Column(TypeName = "decimal(20,2)")]
-        public decimal TotalInvestment { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public string? ModifiedBy { get; set; }
-
-        public DateTime? ModifiedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
-
-
-
-
     }
 }

@@ -16,6 +16,12 @@ namespace DDDCryptoWebApi.Application.Mapping
         {
             CreateMap<UserMaster, RegisterDTO>().ReverseMap();
             CreateMap<UserMaster, LoginDTO>().ReverseMap();
+
+            CreateMap<UserMaster, UserDTO>().ReverseMap();
+            CreateMap<UserMaster, UpdateUserDTO>().ReverseMap();
+
+            CreateMap<UserFavourite, AddFavouriteDTO>().ReverseMap();
+            CreateMap<UserFavourite, UserFavouriteDTO>().ReverseMap();
         }
     }
 }

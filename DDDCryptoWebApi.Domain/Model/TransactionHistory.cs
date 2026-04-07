@@ -34,7 +34,7 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required, StringLength(30)]
         public string Type { get; set; }
 
-        [Column(TypeName = "decimal(20,2)")]
+        [Column(TypeName = "decimal(20,8)")]
         public decimal Quantity { get; set; }
 
         [Column(TypeName = "decimal(20,2)")]

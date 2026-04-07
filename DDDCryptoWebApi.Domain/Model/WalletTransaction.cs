@@ -13,6 +13,8 @@ namespace DDDCryptoWebApi.Domain.Model
         [Key]
         public int WalletTransactionId { get; set; }
 
+        public string TransactionType { get; set; }
+
         [Required]
         public int WalletId { get; set; }
 

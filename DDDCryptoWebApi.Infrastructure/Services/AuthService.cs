@@ -36,12 +36,11 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         public async Task<string> Register(RegisterDTO dto)
         {
-            var existingUser = await db.Users
-                .FirstOrDefaultAsync(x => x.Email == dto.Email);
+            var existingUser = await db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            if (existingUser != null)
+            if (existingUser != null) { 
                 return "Email already exists";
-
+            }
             var data = mapper.Map<UserMaster>(dto);
 
             data.PassWord = BCrypt.Net.BCrypt.HashPassword(dto.PassWord);
@@ -66,15 +65,13 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         public async Task<AuthResponseDTO> Login(LoginDTO dto)
         {
-            var user = await db.Users
-                .FirstOrDefaultAsync(x => x.Email == dto.Email);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            if (user == null)
+            if (user == null) { 
                 return null;
+            }
 
-            bool validPassword = BCrypt.Net.BCrypt.Verify(
-                dto.Password,
-                user.PassWord);
+            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.Password,user.PassWord);
 
             if (!validPassword)
                 return null;
@@ -99,15 +96,13 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         public async Task<string> ForgotPassword(string email)
         {
-            var user = await db.Users
-                .FirstOrDefaultAsync(x => x.Email == email);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == email);
 
-            if (user == null)
+            if (user == null) { 
                 return "Email not found";
+            }
 
-            var otp = new Random()
-                .Next(100000, 999999)
-                .ToString();
+            var otp = new Random().Next(100000, 999999).ToString();
 
             user.ResetOtp = otp;
 
@@ -120,14 +115,9 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         // VERIFY RESET OTP 
 
-        public async Task<string> VerifyResetOtp(
-            string email,
-            string otp)
+        public async Task<string> VerifyResetOtp(string email, string otp)
         {
-            var user = await db.Users
-                .FirstOrDefaultAsync(x =>
-                    x.Email == email &&
-                    x.ResetOtp == otp);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == email && x.ResetOtp == otp);
 
             if (user == null)
                 return "Invalid OTP";
@@ -143,14 +133,12 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             if (dto.NewPassword != dto.ConfirmPassword)
                 return "Passwords do not match";
 
-            var user = await db.Users
-                .FirstOrDefaultAsync(x => x.Email == dto.Email);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
 
             if (user == null)
                 return "User not found";
 
-            user.PassWord =
-                BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            user.PassWord = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
 
             user.ResetOtp = null;
 
@@ -163,8 +151,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         public async Task<string> Setup2FA(string email)
         {
-            var user = await db.Users
-                .FirstOrDefaultAsync(x => x.Email == email);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == email);
 
             string issuer = "DDDCrypto";
 
@@ -191,20 +178,19 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             string email,
             string code)
         {
-            var user = await db.Users
-                .FirstOrDefaultAsync(x => x.Email == email);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == email);
 
-            var keyBytes = Base32Encoding.ToBytes(
-                user.TwoFactorSecretKey);
+            var keyBytes = Base32Encoding.ToBytes(user.TwoFactorSecretKey);
 
             var totp = new Totp(keyBytes);
 
-            bool valid = totp.VerifyTotp(
-                code,
-                out long step);
+            bool valid = totp.VerifyTotp(code,out long step);
 
             if (!valid)
+            {
                 return null;
+            }
+                
 
             user.IsTwoFactorEnabled = true;
 
@@ -226,12 +212,9 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(
-                    configuration["Jwt:Key"]));
+                Encoding.UTF8.GetBytes( configuration["Jwt:Key"]));
 
-            var cred = new SigningCredentials(
-                key,
-                SecurityAlgorithms.HmacSha256);
+            var cred = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
@@ -256,25 +239,16 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         private void SendEmailOTP(string email, string otp)
         {
-            SendMail(email,
-                "Password Reset OTP",
-                $"Your OTP is {otp}");
+            SendMail(email, "Password Reset OTP",$"Your OTP is {otp}");
         }
 
-        private void SendMail(
-            string toEmail,
-            string subject,
-            string body)
+        private void SendMail( string toEmail, string subject, string body)
         {
             var message = new MimeMessage();
 
-            message.From.Add(
-                new MailboxAddress(
-                    "Crypto",
-                    "shakuahmedshaikh@gmail.com"));
+            message.From.Add(new MailboxAddress("Crypto","shakuahmedshaikh@gmail.com"));
 
-            message.To.Add(
-                new MailboxAddress("", toEmail));
+            message.To.Add( new MailboxAddress("", toEmail));
 
             message.Subject = subject;
 

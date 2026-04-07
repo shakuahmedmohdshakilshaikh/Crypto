@@ -4,6 +4,7 @@ using DDDCryptoWebApi.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DDDCryptoWebApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260407130055_updatedWalletTranscation")]
+    partial class updatedWalletTranscation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,46 +131,6 @@ namespace DDDCryptoWebApi.Infrastructure.Migrations
                     b.HasKey("CurrencyId");
 
                     b.ToTable("Currencies");
-                });
-
-            modelBuilder.Entity("DDDCryptoWebApi.Domain.Model.PortfolioTransaction", b =>
-                {
-                    b.Property<int>("PortfolioTransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PortfolioTransactionId"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CryptoId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("PricePerUnit")
-                        .HasColumnType("decimal(20,2)");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(20,8)");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(20,2)");
-
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PortfolioTransactionId");
-
-                    b.HasIndex("CryptoId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PortfolioTransactions");
                 });
 
             modelBuilder.Entity("DDDCryptoWebApi.Domain.Model.Setting", b =>
@@ -415,7 +378,7 @@ namespace DDDCryptoWebApi.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(20,8)");
+                        .HasColumnType("decimal(20,2)");
 
                     b.Property<decimal>("TotalInvestment")
                         .HasColumnType("decimal(20,2)");
@@ -541,25 +504,6 @@ namespace DDDCryptoWebApi.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Currency");
-                });
-
-            modelBuilder.Entity("DDDCryptoWebApi.Domain.Model.PortfolioTransaction", b =>
-                {
-                    b.HasOne("DDDCryptoWebApi.Domain.Model.CryptoMaster", "Crypto")
-                        .WithMany()
-                        .HasForeignKey("CryptoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DDDCryptoWebApi.Domain.Model.UserMaster", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Crypto");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DDDCryptoWebApi.Domain.Model.Setting", b =>

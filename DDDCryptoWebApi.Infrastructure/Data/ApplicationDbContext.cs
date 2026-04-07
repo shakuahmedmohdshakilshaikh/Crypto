@@ -17,6 +17,7 @@ namespace DDDCryptoWebApi.Infrastructure.Data
         public DbSet<WalletMaster> Wallets { get; set; }
         public DbSet<CryptoMaster> Cryptos { get; set; }
         public DbSet<UserPortFolio> Portfolios { get; set; }
+        public DbSet<PortfolioTransaction> PortfolioTransactions { get; set; }
         public DbSet<TransactionHistory> Transactions { get; set; }
         public DbSet<WalletTransaction> WalletTransactions { get; set; }
         public DbSet<UserFavourite> Favorites { get; set; }
