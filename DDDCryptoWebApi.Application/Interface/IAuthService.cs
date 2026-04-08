@@ -18,7 +18,7 @@ namespace DDDCryptoWebApi.Application.Interface
 
         Task<string> ResetPassword(ResetPasswordDTO dto);
 
-        Task<string> Setup2FA(string email);
+        Task<Setup2FADTO> Setup2FA(string email);
 
         Task<AuthResponseDTO> Verify2FA(string email, string code);
     }

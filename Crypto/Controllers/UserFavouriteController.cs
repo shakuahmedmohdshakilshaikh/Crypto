@@ -1,11 +1,13 @@
-﻿using DDDCryptoWebApi.Application.DTO;
+﻿using Asp.Versioning;
+using DDDCryptoWebApi.Application.DTO;
 using DDDCryptoWebApi.Application.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Crypto.Controllers
+namespace Crypto.Controllers.v2
 {
-    [Route("api/[controller]")]
+    [ApiVersion("2")]
+    [Route("api/v{version:ApiVersion}/[controller]")]
     [ApiController]
     public class UserFavouriteController : ControllerBase
     {

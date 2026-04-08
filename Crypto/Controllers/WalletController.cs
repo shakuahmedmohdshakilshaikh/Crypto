@@ -1,11 +1,13 @@
-﻿using DDDCryptoWebApi.Application.DTO;
+﻿using Asp.Versioning;
+using DDDCryptoWebApi.Application.DTO;
 using DDDCryptoWebApi.Application.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Crypto.Controllers
+namespace Crypto.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:Apiversion}/[controller]")]
     [ApiController]
     public class WalletController : ControllerBase
     {

@@ -1,11 +1,13 @@
-﻿using DDDCryptoWebApi.Application.DTO;
+﻿using Asp.Versioning;
+using DDDCryptoWebApi.Application.DTO;
 using DDDCryptoWebApi.Application.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Crypto.Controllers
+namespace Crypto.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/v{version:apiversion}/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -19,7 +21,8 @@ namespace Crypto.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
-            return Ok(await _service.Register(dto));
+            var data = await _service.Register(dto);
+            return Ok(ApiResponse<string>.SuccessResponse(data,"Registered successfully"));
         }
 
         [HttpPost("login")]
@@ -30,7 +33,7 @@ namespace Crypto.Controllers
             if (result == null)
                 return Unauthorized();
 
-            return Ok(result);
+            return Ok(ApiResponse<AuthResponseDTO>.SuccessResponse(result,"Login successfull"));
         }
 
         [HttpPost("forgot-password")]
@@ -43,7 +46,15 @@ namespace Crypto.Controllers
         public async Task<IActionResult> ResetPassword(
             ResetPasswordDTO dto)
         {
-            return Ok(await _service.ResetPassword(dto));
+          var data =  await _service.ResetPassword(dto);
+            return Ok(ApiResponse<string>.SuccessResponse(data,"Password is reset"));
+        }
+
+        [HttpPost("setup-2fa")]
+        public async Task<IActionResult> SetUp2Fa(string email) {
+
+            var data = await _service.Setup2FA(email);
+            return Ok(ApiResponse<Setup2FADTO>.SuccessResponse(data, "2fa enabled"));
         }
 
         [HttpPost("verify-2fa")]
@@ -54,7 +65,7 @@ namespace Crypto.Controllers
                 dto.Email,
                 dto.Code);
 
-            return Ok(result);
+            return Ok(ApiResponse<AuthResponseDTO>.SuccessResponse(result, "otp is verify"));
         }
 
     }

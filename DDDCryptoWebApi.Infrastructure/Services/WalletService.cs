@@ -61,7 +61,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
             var options = new Dictionary<string, object>
     {
-        { "amount", dto.Amount  }, // paise
+        { "amount", dto.Amount * 100 }, // paise
         { "currency", "INR" },
         { "receipt", $"wallet_{dto.UserId}_{DateTime.Now.Ticks}" },
         { "payment_capture", 1 }

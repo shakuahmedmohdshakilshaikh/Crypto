@@ -149,9 +149,41 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         //  SETUP 2FA 
 
-        public async Task<string> Setup2FA(string email)
+        //public async Task<string> Setup2FA(string email)
+        //{
+        //    var user = await db.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+        //    string issuer = "DDDCrypto";
+
+        //    var otpUri =
+        //        $"otpauth://totp/{issuer}:{email}" +
+        //        $"?secret={user.TwoFactorSecretKey}" +
+        //        $"&issuer={issuer}";
+
+        //    using var qrGenerator = new QRCodeGenerator();
+
+        //    var qrCodeData =
+        //        qrGenerator.CreateQrCode(
+        //            otpUri,
+        //            QRCodeGenerator.ECCLevel.Q);
+
+        //    var qrCode = new Base64QRCode(qrCodeData);
+
+        //    return qrCode.GetGraphic(20);
+        //}
+
+        public async Task<Setup2FADTO> Setup2FA(string email)
         {
             var user = await db.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            if (string.IsNullOrEmpty(user.TwoFactorSecretKey))
+            {
+                user.TwoFactorSecretKey = Base32Encoding.ToString(KeyGeneration.GenerateRandomKey(20));
+                await db.SaveChangesAsync();
+            }
 
             string issuer = "DDDCrypto";
 
@@ -161,15 +193,14 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                 $"&issuer={issuer}";
 
             using var qrGenerator = new QRCodeGenerator();
-
-            var qrCodeData =
-                qrGenerator.CreateQrCode(
-                    otpUri,
-                    QRCodeGenerator.ECCLevel.Q);
-
+            var qrCodeData = qrGenerator.CreateQrCode(otpUri, QRCodeGenerator.ECCLevel.Q);
             var qrCode = new Base64QRCode(qrCodeData);
 
-            return qrCode.GetGraphic(20);
+            return new Setup2FADTO
+            {
+                SecretKey = user.TwoFactorSecretKey,
+                QrCodeImageBase64 = qrCode.GetGraphic(20)
+            };
         }
 
         // VERIFY 2FA 
@@ -179,6 +210,15 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             string code)
         {
             var user = await db.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+                
+            if (user == null)
+            {
+                throw new Exception("User not Found");
+            }
+
+            if (string.IsNullOrEmpty(user.TwoFactorSecretKey))
+                throw new Exception("2FA is not set up for this user");
 
             var keyBytes = Base32Encoding.ToBytes(user.TwoFactorSecretKey);
 
