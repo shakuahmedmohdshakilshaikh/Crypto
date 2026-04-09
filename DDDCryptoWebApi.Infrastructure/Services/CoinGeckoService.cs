@@ -10,14 +10,12 @@ namespace DDDCryptoWebApi.Infrastructure.Services
     public class CoinGeckoService : ICoinGeckoService
     {
         private readonly HttpClient _httpClient;
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext db;
 
-        public CoinGeckoService(
-            HttpClient httpClient,
-            ApplicationDbContext context)
+        public CoinGeckoService( HttpClient httpClient, ApplicationDbContext context)
         {
             _httpClient = httpClient;
-            _context = context;
+            db = context;
         }
 
         public async Task<List<CoinGeckoCoinDTO>> FetchCoinsAsync(
@@ -37,11 +35,13 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             return result ?? new List<CoinGeckoCoinDTO>();
         }
 
+      
+
         public async Task SyncCoinsToDatabaseAsync()
         {
             var coins = await FetchCoinsAsync();
 
-            var inrCurrency = await _context.Currencies
+            var inrCurrency = await db.Currencies
                 .FirstOrDefaultAsync(x => x.Symbol == "INR");
 
             if (inrCurrency == null)
@@ -51,7 +51,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
             foreach (var coin in coins)
             {
-                var existing = await _context.Cryptos
+                var existing = await db.Cryptos
                     .FirstOrDefaultAsync(x => x.CoinGeckoId == coin.Id);
 
                 if (existing == null)
@@ -69,10 +69,10 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                         CurrencyId = inrCurrency.CurrencyId
                     };
 
-                    _context.Cryptos.Add(newCoin);
+                    db.Cryptos.Add(newCoin);
                 }
                 else
-                {
+                {   
                     existing.CurrentPrice = coin.CurrentPrice;
                     existing.MarketCap = coin.MarketCap;
                     existing.Image = coin.Image;
@@ -81,7 +81,98 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                 }
             }
 
-            await _context.SaveChangesAsync();
+            await db.SaveChangesAsync();
+        }
+
+
+        public async Task<PagedResponse<CryptoListDTO>> GetCoinAsync(CryptoPageRequestDTO request)
+        {
+          var query =   db.Cryptos.AsQueryable();
+
+            //search
+            if (!string.IsNullOrWhiteSpace(request.SearchText))
+            {
+                var search = request.SearchText.Trim().ToLower();
+
+                query = query.Where(x =>
+                    (x.CryptoName != null && x.CryptoName.ToLower().Contains(search)) ||
+                    (x.Symbol != null && x.Symbol.ToLower().Contains(search)) ||
+                      (x.CoinGeckoId != null && x.CoinGeckoId.ToLower().Contains(search))
+                      );
+            }
+
+
+            //sorting
+            switch (request.SortBy.ToLower())
+            {
+                case "cryptoName": 
+                    case "name":
+                        query = request.SortOrder.ToLower() == "desc" ? query.OrderByDescending(x => x.CryptoName) : query.OrderBy(x => x.CryptoName);
+                    break;
+
+                case "symbol":
+                    query = request.SortOrder.ToLower() == "desc" ? query.OrderByDescending(x => x.Symbol) :query.OrderBy(x => x.Symbol);
+                    break;
+
+                case "currentprice":
+                case "price":
+                    query = request.SortOrder?.ToLower() == "desc"
+                        ? query.OrderByDescending(x => x.CurrentPrice)
+                        : query.OrderBy(x => x.CurrentPrice);
+                    break;
+
+                case "marketcap":
+                    query = request.SortOrder?.ToLower() == "desc"
+                        ? query.OrderByDescending(x => x.MarketCap)
+                        : query.OrderBy(x => x.MarketCap);
+                    break;
+
+                case "lastsyncedat":
+                    query = request.SortOrder?.ToLower() == "desc"
+                        ? query.OrderByDescending(x => x.LastSyncedAt)
+                        : query.OrderBy(x => x.LastSyncedAt);
+                    break;
+
+                default:
+                    query = query.OrderBy(x => x.CryptoName);
+                    break;
+            }
+
+            var totalRecord  =  await query.CountAsync();
+
+            var totalPages = (int)Math.Ceiling( (double)totalRecord / request.PageSize);
+
+            var data = await query.Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new CryptoListDTO
+                {
+                    CryptoId = x.CryptoId,
+                    CryptoName = x.CryptoName,
+                    Symbol = x.Symbol,
+                    CoinGeckoId = x.CoinGeckoId,
+                    CurrentPrice = x.CurrentPrice,
+                    MarketCap = x.MarketCap,
+                    Image = x.Image,
+                    IsActive = x.IsActive,
+                    LastSyncedAt = x.LastSyncedAt,
+                    CurrencyName = x.Currency.Currencyname
+
+                }).ToListAsync();
+
+            return new PagedResponse<CryptoListDTO>
+            {
+                Data = data,
+                TotalPages = totalPages,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                HasNext = request.PageSize < totalPages,
+                HasPrevious = request.PageNumber > 1,
+                TotalRecords = totalRecord,
+                Nextpage = request.PageNumber < totalPages ? request.PageNumber + 1 : 0,
+                PreviousPage = request.PageNumber > 1 ? request.PageNumber - 1 : 0,
+            };
+
+
         }
     }
 }

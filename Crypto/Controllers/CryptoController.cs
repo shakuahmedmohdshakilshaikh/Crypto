@@ -39,5 +39,12 @@ namespace Crypto.Controllers.v1
                     .SuccessResponse(data, "Data fetched successfully")
             );
         }
+
+        [HttpGet("GetCoins")]
+        public  async Task<IActionResult> GetCoins([FromQuery] CryptoPageRequestDTO request)
+        {
+           var data = await _service.GetCoinAsync(request);
+            return Ok(ApiResponse<PagedResponse<CryptoListDTO>>.SuccessResponse(data, "Coins is fetched succesfully"));
+        }
     }
     }

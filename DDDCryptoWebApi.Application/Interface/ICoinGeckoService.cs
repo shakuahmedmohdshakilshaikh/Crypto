@@ -1,4 +1,5 @@
-﻿using DDDCryptoWebApi.Application.DTO;
+﻿using Azure;
+using DDDCryptoWebApi.Application.DTO;
 using DDDCryptoWebApi.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,7 @@ namespace DDDCryptoWebApi.Application.Interface
             int pageSize = 10);
 
         Task SyncCoinsToDatabaseAsync();
+
+        Task<PagedResponse<CryptoListDTO>> GetCoinAsync(CryptoPageRequestDTO request);
     }
 }
