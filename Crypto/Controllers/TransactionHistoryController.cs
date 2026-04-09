@@ -19,6 +19,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 60)] // caching 60 sec
         public async Task<IActionResult> Getall()
         {
           var data =  await service.GetAllAsync();
@@ -27,6 +28,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet("{id}")]
+        [ResponseCache(Duration = 60)] // caching 60 sec
         public async Task<IActionResult> GetById(int id)
         {
             var data = await service.GetByIdAsync(id);
@@ -36,6 +38,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet("wallet/{walletId}")]
+        [ResponseCache(Duration = 60)] // caching 60 sec
         public async Task<IActionResult> GetByWalletId(int walletId)
         {
             var data = await service.GetByWalletIdAsync(walletId);

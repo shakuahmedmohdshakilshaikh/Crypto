@@ -20,6 +20,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 60)]
         public  async Task<IActionResult> GetDashboard(int userId)
         {   
            var data = await service.GetDashboardAsync(userId);

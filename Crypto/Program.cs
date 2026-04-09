@@ -8,10 +8,12 @@ using DDDCryptoWebApi.Infrastructure.Data;
 using DDDCryptoWebApi.Infrastructure.Jobs;
 using DDDCryptoWebApi.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,9 @@ builder.Host.UseSerilog();
 
 // Add services to the container
 builder.Services.AddControllers();
+
+builder.Services.AddResponseCaching(); // response caching
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -107,6 +112,19 @@ builder.Services.AddApiVersioning(options =>
     option.SubstituteApiVersionInUrl = true; // for in swaggerTesting
 });
 
+// rate limiter
+builder.Services.AddRateLimiter(options => {
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.PermitLimit = 3; // max limit
+        opt.Window = TimeSpan.FromSeconds(10);
+
+        //  This enables throttling (queue instead of reject)
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        opt.QueueLimit = 2;
+    });
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -121,9 +139,10 @@ app.UseHttpsRedirection();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
+app.UseResponseCaching(); // resonse caching
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
+app.UseRateLimiter(); // global ratelimit
+app.MapControllers().RequireRateLimiting("fixed");  //global ratelimit
 
 app.Run();

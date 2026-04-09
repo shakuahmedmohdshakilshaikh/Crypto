@@ -30,6 +30,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet("fetch")]
+        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> Fetch()
         {
             var data = await _service.FetchCoinsAsync();
@@ -41,6 +42,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet("GetCoins")]
+        [ResponseCache(Duration = 60)]
         public  async Task<IActionResult> GetCoins([FromQuery] CryptoPageRequestDTO request)
         {
            var data = await _service.GetCoinAsync(request);

@@ -18,6 +18,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 60)] //cacahing
         public async Task<IActionResult> GetAll()
         {
             var data = await service.GetAllAsync();
@@ -27,6 +28,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet("{id}")]
+        [ResponseCache(Duration = 60)] //cacahing
         public async Task<IActionResult> GetById(int id)
         {
             var data = await service.GetByIdAsync(id);
@@ -36,6 +38,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpPut("{id}")]
+
         public async Task<IActionResult> Update(int id, UpdateUserDTO dto)
         {
             await service.UpdateAsync(id, dto);

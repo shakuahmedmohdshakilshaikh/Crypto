@@ -35,6 +35,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet("{userId}")]
+        [ResponseCache(Duration = 60)] // caching 60 sec
         public async Task<IActionResult> GetPortfolio(int userId)
         {
             var data = await service.GetPortfolioByUserIdAsync(userId);
@@ -43,6 +44,7 @@ namespace Crypto.Controllers.v1
         }
 
         [HttpGet("transactions/{userId}")]
+        [ResponseCache(Duration = 60)] // caching 60 sec
         public async Task<IActionResult> GetTransactions(int userId)
         {
             var data = await service.GetPortfolioTransactionsAsync(userId);
