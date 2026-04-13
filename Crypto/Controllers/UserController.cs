@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Crypto.Controllers.v1
 {
     [ApiVersion("1")]
-    [Route("api/v{version:apiversion}/[controller]")]
+    [Route("api/v{version:apiversion}/user")]
     [ApiController]
     public class UserController : ControllerBase
     {

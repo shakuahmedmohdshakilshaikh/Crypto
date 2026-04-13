@@ -4,10 +4,10 @@ using DDDCryptoWebApi.Application.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Crypto.Controllers.v2
+namespace Crypto.Controllers.v1
 {
-    [ApiVersion("2")]
-    [Route("api/v{version:ApiVersion}/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/v{version:ApiVersion}/userfavourite")]
     [ApiController]
     public class UserFavouriteController : ControllerBase
     {

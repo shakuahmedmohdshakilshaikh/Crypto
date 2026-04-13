@@ -15,7 +15,8 @@ namespace DDDCryptoWebApi.Domain.Model
         [Required, StringLength(30)]
         public string UserFullName { get; set; }
 
-        [Required, EmailAddress, StringLength(50)]
+        
+        [Required, StringLength(50)]
         public string Email { get; set; }
 
         [Required, StringLength(200)]

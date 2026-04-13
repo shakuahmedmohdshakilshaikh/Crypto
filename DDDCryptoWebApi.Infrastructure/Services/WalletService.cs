@@ -91,7 +91,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             //Utils.verifyPaymentSignature(attributes); // enable when using in angluar 
 
             var wallet = await db.Wallets
-                .FirstOrDefaultAsync(x => x.UserId == dto.UserId);
+                .FirstOrDefaultAsync(x => x.UserId == dto.UserId );
 
             if (wallet == null)
             {

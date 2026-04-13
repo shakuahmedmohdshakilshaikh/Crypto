@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Crypto.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version:Apiversion}/[controller]")]
+    [Route("api/v{version:Apiversion}/wallet")]
     [ApiController]
     public class WalletController : ControllerBase
     {

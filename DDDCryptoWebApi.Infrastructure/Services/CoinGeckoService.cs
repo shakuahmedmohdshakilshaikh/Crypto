@@ -57,7 +57,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                 if (existing == null)
                 {
                     var newCoin = new CryptoMaster
-                    {
+                    {  
                         CryptoName = coin.Name,
                         Symbol = coin.Symbol.ToUpper(),
                         CoinGeckoId = coin.Id,
@@ -87,9 +87,9 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         public async Task<PagedResponse<CryptoListDTO>> GetCoinAsync(CryptoPageRequestDTO request)
         {
-          var query =   db.Cryptos.AsQueryable();
+            var query = db.Cryptos.AsQueryable();
 
-            //search
+            // Search
             if (!string.IsNullOrWhiteSpace(request.SearchText))
             {
                 var search = request.SearchText.Trim().ToLower();
@@ -97,38 +97,44 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                 query = query.Where(x =>
                     (x.CryptoName != null && x.CryptoName.ToLower().Contains(search)) ||
                     (x.Symbol != null && x.Symbol.ToLower().Contains(search)) ||
-                      (x.CoinGeckoId != null && x.CoinGeckoId.ToLower().Contains(search))
-                      );
+                    (x.CoinGeckoId != null && x.CoinGeckoId.ToLower().Contains(search))
+                );
             }
 
+            // Sorting
+            var sortBy = request.SortBy?.Trim().ToLower();
+            var sortOrder = request.SortOrder?.Trim().ToLower();
 
-            //sorting
-            switch (request.SortBy.ToLower())
+            switch (sortBy)
             {
-                case "cryptoName": 
-                    case "name":
-                        query = request.SortOrder.ToLower() == "desc" ? query.OrderByDescending(x => x.CryptoName) : query.OrderBy(x => x.CryptoName);
+                case "cryptoname":
+                case "name":
+                    query = sortOrder == "desc"
+                        ? query.OrderByDescending(x => x.CryptoName)
+                        : query.OrderBy(x => x.CryptoName);
                     break;
 
                 case "symbol":
-                    query = request.SortOrder.ToLower() == "desc" ? query.OrderByDescending(x => x.Symbol) :query.OrderBy(x => x.Symbol);
+                    query = sortOrder == "desc"
+                        ? query.OrderByDescending(x => x.Symbol)
+                        : query.OrderBy(x => x.Symbol);
                     break;
 
                 case "currentprice":
                 case "price":
-                    query = request.SortOrder?.ToLower() == "desc"
+                    query = sortOrder == "desc"
                         ? query.OrderByDescending(x => x.CurrentPrice)
                         : query.OrderBy(x => x.CurrentPrice);
                     break;
 
                 case "marketcap":
-                    query = request.SortOrder?.ToLower() == "desc"
+                    query = sortOrder == "desc"
                         ? query.OrderByDescending(x => x.MarketCap)
                         : query.OrderBy(x => x.MarketCap);
                     break;
 
                 case "lastsyncedat":
-                    query = request.SortOrder?.ToLower() == "desc"
+                    query = sortOrder == "desc"
                         ? query.OrderByDescending(x => x.LastSyncedAt)
                         : query.OrderBy(x => x.LastSyncedAt);
                     break;
@@ -138,11 +144,12 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                     break;
             }
 
-            var totalRecord  =  await query.CountAsync();
+            var totalRecord = await query.CountAsync();
 
-            var totalPages = (int)Math.Ceiling( (double)totalRecord / request.PageSize);
+            var totalPages = (int)Math.Ceiling((double)totalRecord / request.PageSize);
 
-            var data = await query.Skip((request.PageNumber - 1) * request.PageSize)
+            var data = await query
+                .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new CryptoListDTO
                 {
@@ -156,8 +163,8 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                     IsActive = x.IsActive,
                     LastSyncedAt = x.LastSyncedAt,
                     CurrencyName = x.Currency.Currencyname
-
-                }).ToListAsync();
+                })
+                .ToListAsync();
 
             return new PagedResponse<CryptoListDTO>
             {
@@ -165,14 +172,12 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                 TotalPages = totalPages,
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
-                HasNext = request.PageSize < totalPages,
+                HasNext = request.PageNumber < totalPages,
                 HasPrevious = request.PageNumber > 1,
                 TotalRecords = totalRecord,
                 Nextpage = request.PageNumber < totalPages ? request.PageNumber + 1 : 0,
                 PreviousPage = request.PageNumber > 1 ? request.PageNumber - 1 : 0,
             };
-
-
         }
     }
 }

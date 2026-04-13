@@ -8,7 +8,7 @@ namespace DDDCryptoWebApi.Application.DTO
 {
     public class Setup2FADTO
     {
-        public string SecretKey { get; set; }
+        //public string SecretKey { get; set; }
 
         public string QrCodeImageBase64 { get; set; }
     }

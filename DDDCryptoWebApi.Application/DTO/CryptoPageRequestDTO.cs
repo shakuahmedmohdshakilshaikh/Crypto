@@ -8,16 +8,16 @@ namespace DDDCryptoWebApi.Application.DTO
 {
     public class CryptoPageRequestDTO
     {
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
         public int PageNumber { get; set; } = 1;
 
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 5;
 
-        public string SearchText { get; set; } = "";
+        public string? SearchText { get; set; } = "";
 
-        public string SortBy { get; set; } = "CryptoName";
+        public string? SortBy { get; set; } = "";
 
-        public string SortOrder { get; set; } = "asc";
+        public string? SortOrder { get; set; } = "asc";
     }
 
 }

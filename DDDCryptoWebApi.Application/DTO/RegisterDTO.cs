@@ -11,13 +11,19 @@ namespace DDDCryptoWebApi.Application.DTO
     {
         public string UserFullName { get; set; }
 
-        [Required, EmailAddress, StringLength(25)]
+        [Required]
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
 
-        [Required, StringLength(50)]
+        [Required]
+        [RegularExpression(
+            @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$",
+            ErrorMessage = "Weak password"
+        )]
         public string PassWord { get; set; }
 
-        [Required, StringLength(12)]
+        [Required]
+        [RegularExpression(@"^[6-9]\d{9}$")]
         public string PhoneNumber { get; set; }
 
 

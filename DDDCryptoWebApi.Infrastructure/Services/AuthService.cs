@@ -38,8 +38,9 @@ namespace DDDCryptoWebApi.Infrastructure.Services
         {
             var existingUser = await db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            if (existingUser != null) { 
-                return "Email already exists";
+            if (existingUser != null) {
+                //return "Email already exists";
+                throw new Exception("Email already exists");
             }
             var data = mapper.Map<UserMaster>(dto);
 
@@ -71,20 +72,20 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                 return null;
             }
 
-            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.Password,user.PassWord);
+            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.PassWord,user.PassWord);
 
             if (!validPassword)
                 return null;
 
-            if (user.IsTwoFactorEnabled)
-            {
-                return new AuthResponseDTO
-                {
-                   Message = "2FA_REQUIRED"
-                };
-            }
+            //if (user.IsTwoFactorEnabled)
+            //{
+            //    return new AuthResponseDTO
+            //    {
+            //       Message = "2FA_REQUIRED"
+            //    };
+            //}
 
-            var token = GenerateToken(user.Email);
+            var token = GenerateToken(user.UserId);
 
             return new AuthResponseDTO
             {
@@ -198,7 +199,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
             return new Setup2FADTO
             {
-                SecretKey = user.TwoFactorSecretKey,
+                //SecretKey = user.TwoFactorSecretKey,
                 QrCodeImageBase64 = qrCode.GetGraphic(20)
             };
         }
@@ -238,17 +239,17 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
             return new AuthResponseDTO
             {
-                Token = GenerateToken(user.Email)
+                Token = GenerateToken(user.UserId)
             };
         }
 
         //  JWT 
 
-        private string GenerateToken(string email)
+        private string GenerateToken(int id)
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, email)
+            {   new Claim("userId", id.ToString()),
+                //new Claim(ClaimTypes.NameIdentifier, email)
             };
 
             var key = new SymmetricSecurityKey(
@@ -257,8 +258,8 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             var cred = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: configuration["Jwt:Issuer"],
-                audience: configuration["Jwt:Audience"],
+                //issuer: configuration["Jwt:Issuer"],
+                //audience: configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: cred

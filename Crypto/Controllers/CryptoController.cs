@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Crypto.Controllers.v1
 {
     [ApiVersion("1")]
-    [Route("api/v{version:apiversion}/[controller]")]
+    [Route("api/v{version:apiversion}/crypto")]
     [ApiController]
     public class CryptoController : ControllerBase
     {
@@ -41,7 +41,7 @@ namespace Crypto.Controllers.v1
             );
         }
 
-        [HttpGet("GetCoins")]
+        [HttpGet("get-coins")]
         [ResponseCache(Duration = 60)]
         public  async Task<IActionResult> GetCoins([FromQuery] CryptoPageRequestDTO request)
         {
