@@ -65,7 +65,9 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                     CryptoName = x.Crypto.CryptoName,
                     Symbol = x.Crypto.Symbol,
                     Image = x.Crypto.Image,
-                    CreatedAt = x.CreatedAt
+                    CurrentPrice = x.Crypto.CurrentPrice,
+                    MarketCap = x.Crypto.MarketCap
+                   
                 })
                 .ToListAsync();
 

@@ -32,7 +32,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             this.mapper = mapper;
         }
 
-        //  REGISTER 
+        //  register 
 
         public async Task<string> Register(RegisterDTO dto)
         {
@@ -62,7 +62,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             return "Registered Successfully";
         }
 
-        // LOGIN 
+        // login 
 
         public async Task<AuthResponseDTO> Login(LoginDTO dto)
         {
@@ -93,7 +93,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             };
         }
 
-        //  FORGOT PASSWORD 
+        //  forgot password
 
         public async Task<string> ForgotPassword(string email)
         {

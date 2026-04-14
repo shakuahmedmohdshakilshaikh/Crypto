@@ -14,7 +14,7 @@ namespace DDDCryptoWebApi.Application.Interface
  
         Task<TransactionHistoryDTO> GetByIdAsync(int transactionId);
 
-        Task<List<TransactionHistoryDTO>> GetByWalletIdAsync(int walletId);
+        Task<List<TransactionHistoryDTO>> GetByWalletIdAsync(int userid);
 
     }
 }

@@ -107,7 +107,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
             switch (sortBy)
             {
-                case "cryptoname":
+                //case "cryptoname":
                 case "name":
                     query = sortOrder == "desc"
                         ? query.OrderByDescending(x => x.CryptoName)
@@ -120,7 +120,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                         : query.OrderBy(x => x.Symbol);
                     break;
 
-                case "currentprice":
+                //case "currentprice":
                 case "price":
                     query = sortOrder == "desc"
                         ? query.OrderByDescending(x => x.CurrentPrice)

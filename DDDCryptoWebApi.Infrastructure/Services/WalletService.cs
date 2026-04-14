@@ -88,7 +88,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
         { "razorpay_signature", dto.RazorpaySignature }
     };
 
-            //Utils.verifyPaymentSignature(attributes); // enable when using in angluar 
+            Utils.verifyPaymentSignature(attributes); // enable when using in angluar 
 
             var wallet = await db.Wallets
                 .FirstOrDefaultAsync(x => x.UserId == dto.UserId );

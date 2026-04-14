@@ -37,7 +37,7 @@ namespace DDDCryptoWebApi.Infrastructure.Jobs
                 }
 
 
-                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
             }
         }
     }

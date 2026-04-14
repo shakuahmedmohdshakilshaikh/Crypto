@@ -67,11 +67,11 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             return transaction;
         }
 
-        public async Task<List<TransactionHistoryDTO>> GetByWalletIdAsync(int walletId)
+        public async Task<List<TransactionHistoryDTO>> GetByWalletIdAsync(int userid)
         {
             return await db.Transactions
                 .Include(x => x.Crypto)
-                .Where(x => x.WalletId == walletId && x.DeletedAt == null)
+                .Where(x => x.UserId == userid && x.DeletedAt == null)
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new TransactionHistoryDTO
                 {

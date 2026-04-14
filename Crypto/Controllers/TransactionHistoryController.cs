@@ -37,11 +37,11 @@ namespace Crypto.Controllers.v1
                 .SuccessResponse(data, "Transaction history fetched successfully"));
         }
 
-        [HttpGet("wallet/{walletId}")]
+        [HttpGet("wallet/{userid}")]
         [ResponseCache(Duration = 60)] // caching 60 sec
-        public async Task<IActionResult> GetByWalletId(int walletId)
+        public async Task<IActionResult> GetByWalletId(int userid)
         {
-            var data = await service.GetByWalletIdAsync(walletId);
+            var data = await service.GetByWalletIdAsync(userid);
 
             return Ok(ApiResponse<List<TransactionHistoryDTO>>
                 .SuccessResponse(data, "Wallet transaction history fetched successfully"));
