@@ -116,7 +116,7 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddRateLimiter(options => {
     options.AddFixedWindowLimiter("fixed", opt =>
     {
-        opt.PermitLimit = 3; // max limit
+        opt.PermitLimit = 5; // max limit
         opt.Window = TimeSpan.FromSeconds(10);
 
         //  This enables throttling (queue instead of reject)

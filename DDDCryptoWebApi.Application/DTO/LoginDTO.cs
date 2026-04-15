@@ -9,7 +9,7 @@ namespace DDDCryptoWebApi.Application.DTO
 {
     public class LoginDTO
     {
-        [Required, StringLength(25)]
+        [Required, StringLength(50)]
         [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
 

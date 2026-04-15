@@ -77,19 +77,21 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             if (!validPassword)
                 return null;
 
-            //if (user.IsTwoFactorEnabled)
-            //{
-            //    return new AuthResponseDTO
-            //    {
-            //       Message = "2FA_REQUIRED"
-            //    };
-            //}
+            if (!user.IsTwoFactorEnabled)
+            {
+                return new AuthResponseDTO
+                {
+                    Message = "2FA_REQUIRED",
+                    Email = user.Email
+                };
+            }
 
-            var token = GenerateToken(user.UserId);
+            //var token = GenerateToken(user.UserId);
 
             return new AuthResponseDTO
             {
-                Token = token
+                Message = "VERIFY_2FA_REQUIRED",
+                Email = user.Email
             };
         }
 
@@ -128,13 +130,12 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
         //  RESET PASSWORD 
 
-        public async Task<string> ResetPassword(
-            ResetPasswordDTO dto)
+        public async Task<string> ResetPassword(ResetPasswordDTO dto)
         {
             if (dto.NewPassword != dto.ConfirmPassword)
                 return "Passwords do not match";
 
-            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == dto.Email && x.ResetOtp == dto.Otp);
 
             if (user == null)
                 return "User not found";
@@ -239,7 +240,9 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
             return new AuthResponseDTO
             {
-                Token = GenerateToken(user.UserId)
+                Token = GenerateToken(user.UserId),
+                 UserId = user.UserId,
+                Email = user.Email
             };
         }
 
