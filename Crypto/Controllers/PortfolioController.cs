@@ -21,12 +21,18 @@ namespace Crypto.Controllers.v1
         [HttpPost("buy")]
         public async Task<IActionResult> Buy(BuyCryptoDTO dto)
         {
-            await service.BuyCryptoAsync(dto);
-
-            return Ok(ApiResponse<string>.SuccessResponse("Done", "Crypto bought successfully"));
+            try
+            {
+                await service.BuyCryptoAsync(dto);
+                return Ok(ApiResponse<string>.SuccessResponse("Done", "Crypto bought successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponse<string>.ErrorResponse(ex.Message));
+            }
         }
 
-        [HttpPost("sell")]
+            [HttpPost("sell")]
         public async Task<IActionResult> Sell(SellCryptoDTO dto)
         {
             await service.SellCryptoAsync(dto);

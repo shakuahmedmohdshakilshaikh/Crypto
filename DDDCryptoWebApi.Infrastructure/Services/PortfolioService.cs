@@ -20,6 +20,7 @@ namespace DDDCryptoWebApi.Infrastructure.Services
         }
         public async Task BuyCryptoAsync(BuyCryptoDTO dto)
         {
+        
             if (dto.Amount <= 0)
                 throw new Exception("Amount must be greater than zero");
 
@@ -141,6 +142,8 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             var wallet = await db.Wallets
                 .FirstOrDefaultAsync(x => x.UserId == dto.UserId);
 
+
+
             if (wallet == null)
                 throw new Exception("Wallet not found");
 
@@ -224,8 +227,10 @@ namespace DDDCryptoWebApi.Infrastructure.Services
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new PortfolioTransactionDTO
                 {
+                    CryptoId = x.CryptoId,
                     CryptoName = x.Crypto.CryptoName,
                     Symbol = x.Crypto.Symbol,
+                    Image = x.Crypto.Image,
                     TransactionType = x.TransactionType,
                     Quantity = x.Quantity,
                     PricePerUnit = x.PricePerUnit,
