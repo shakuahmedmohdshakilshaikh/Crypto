@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using DDDCryptoWebApi.Application.DTO;
 using DDDCryptoWebApi.Application.Interface;
+using DDDCryptoWebApi.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,13 @@ namespace Crypto.Controllers.v1
 
             return Ok(ApiResponse<decimal>
                 .SuccessResponse(balance, "Balance fetched"));
+        }
+
+        [HttpGet("transaction-history/{userId}")]
+        public async Task<IActionResult> GetTransactionHistory(int userId)
+        {
+            var data = await _service.GetTransactionHistory(userId);
+            return Ok(ApiResponse<List<WalletTransactionDTO>>.SuccessResponse(data, "Transaction history fetched successfully"));
         }
     }
 }

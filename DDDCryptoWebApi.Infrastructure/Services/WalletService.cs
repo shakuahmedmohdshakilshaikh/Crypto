@@ -155,6 +155,36 @@ namespace DDDCryptoWebApi.Infrastructure.Services
 
             return wallet?.Balance ?? 0;
         }
+
+        public async Task<List<WalletTransactionDTO>> GetTransactionHistory(int userId)
+        {
+            var wallet = await db.Wallets.FirstOrDefaultAsync(x => x.UserId == userId);
+
+            if (wallet == null)
+            {
+                throw new Exception("Wallet not found");
+            }
+
+            var transactions = await db.WalletTransactions
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => new WalletTransactionDTO
+                {
+                    Amount = x.Amount,
+                    TransactionType = x.TransactionType,
+                    Status = x.Status,
+                    PaymentMethod = x.PaymentMethod,
+                    CreatedAt = x.CreatedAt
+                })
+                .ToListAsync();
+
+            if (transactions == null || transactions.Count == 0)
+            {
+                throw new Exception("Transaction history not found");
+            }
+
+            return transactions;
+        }
     }
 
       

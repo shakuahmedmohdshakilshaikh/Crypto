@@ -12,6 +12,7 @@ namespace DDDCryptoWebApi.Application.DTO
 
         public string TransactionType { get; set; }
 
+       
         public string Status { get; set; }
 
         public string PaymentMethod { get; set; }

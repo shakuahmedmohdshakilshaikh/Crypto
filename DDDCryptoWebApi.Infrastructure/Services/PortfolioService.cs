@@ -224,19 +224,26 @@ namespace DDDCryptoWebApi.Infrastructure.Services
             return await db.PortfolioTransactions
                 .Include(x => x.Crypto)
                 .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.CreatedAt)
-                .Select(x => new PortfolioTransactionDTO
+                .GroupBy(x => new
                 {
-                    CryptoId = x.CryptoId,
-                    CryptoName = x.Crypto.CryptoName,
-                    Symbol = x.Crypto.Symbol,
-                    Image = x.Crypto.Image,
-                    TransactionType = x.TransactionType,
-                    Quantity = x.Quantity,
-                    PricePerUnit = x.PricePerUnit,
-                    TotalAmount = x.TotalAmount,
-                    CreatedAt = x.CreatedAt
+                    x.CryptoId,
+                    x.Crypto.CryptoName,
+                    x.Crypto.Symbol,
+                    x.Crypto.Image
                 })
+                .Select(g => new PortfolioTransactionDTO
+                {
+                    CryptoId = g.Key.CryptoId,
+                    CryptoName = g.Key.CryptoName,
+                    Symbol = g.Key.Symbol,
+                    Image = g.Key.Image,
+                    TransactionType = "Summary",
+                    Quantity = g.Sum(x => x.TransactionType == "Buy" ? x.Quantity : -x.Quantity),
+                    PricePerUnit = g.OrderByDescending(x => x.CreatedAt).Select(x => x.PricePerUnit).FirstOrDefault(),
+                    TotalAmount = g.Sum(x => x.TransactionType == "Buy" ? x.TotalAmount : -x.TotalAmount),
+                    CreatedAt = g.Max(x => x.CreatedAt)
+                })
+                .Where(x => x.Quantity > 0)
                 .ToListAsync();
         }
     }

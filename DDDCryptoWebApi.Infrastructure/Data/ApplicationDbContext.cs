@@ -93,6 +93,10 @@ namespace DDDCryptoWebApi.Infrastructure.Data
                 .HasForeignKey(p => p.CryptoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<UserPortFolio>()
+    .HasIndex(x => new { x.UserId, x.CryptoId })
+    .IsUnique();
+
 
             //---------------------------------------------------------
             // TransactionHistory Relationships

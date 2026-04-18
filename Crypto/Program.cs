@@ -77,6 +77,7 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddAutoMapper(typeof(DTOMapping));
 
+
 // Jwt
 builder.Services.AddAuthentication("JwtBearer")
     .AddJwtBearer("JwtBearer", options =>

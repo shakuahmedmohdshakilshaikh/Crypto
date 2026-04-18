@@ -16,5 +16,7 @@ namespace DDDCryptoWebApi.Application.Interface
         Task DeductBalanceAsync(DeductBalanceDTO dto);
 
         Task<decimal> GetBalanceAsync(int userId);
+
+        Task<List<WalletTransactionDTO>> GetTransactionHistory(int userId);
     }
 }
